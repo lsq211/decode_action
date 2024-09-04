@@ -1,65 +1,69 @@
-#2024-09-04 08:31:27
-import requests
-import os
-import time
-import random
-import hashlib
-class yuanshen():
- def __init__(self,cookie):
-  self.cookie=cookie
-  self.h={"Host":"app.zhuanbang.net","accept":"application/json, image/webp","user-agent":"Mozilla/5.0 (Linux; Android 12; M2104K10AC Build/SP1A.210812.016; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/96.0.4664.104 Mobile Safari/537.36 HuoNiuFusion/1.25.0_231652","x-requested-with":"XMLHttpRequest","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","referer":"https://app.zhuanbang.net/assist/activity/47","accept-language":"zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7","accept-encoding":"gzip","Cookie":f"NiuToken={self.cookie}"}
- def sign_(self):
-  d=f"{self.csrftoken}#{self.sessionId}#{self.time}"
-  byte_string=d.encode('utf-8')
-  sha1=hashlib.sha1()
-  sha1.update(byte_string)
-  sign=sha1.hexdigest()
-  return sign
- def video(self,key):
-  i=0
-  while True:
-   i+=1
-   url=f"https://app.zhuanbang.net/{key}/launch?_random={int(time.time() * 1000)}&type=slide"
-   r=requests.get(url,headers=self.h).json()
-   if r['code']==0:
-    print(f"第[{i}]个红包获取信息成功")
-    self.csrftoken=r['data']['extArgs']['csrfToken']
-    self.sessionId=r['data']['extArgs']['sessionId']
-    self.time=int(time.time())
-    url=f"https://app.zhuanbang.net/{key}/award/grant?_t={self.time}"
-    data={"csrfToken":f"{self.csrftoken}","deviceId":f"{self.sessionId}","timestamp":f"{self.time}","sign":f"{self.sign_()}"}
-    r=requests.post(url,headers=self.h,data=data).json()
-    if r['code']==0:
-     print(f"第[{i}]个红包领取成功,获得[{r['data']['awardMoney']}]元")
-    else:
-     print(f"第[{i}]个红包领取失败---[{r['msg']}]")
-     break
+#2024-09-04 08:32:46
+import json 
+import os 
+import requests 
+def get_id(OO00O00OOO0OOOOO0,OOO000OOO00O0O000):
+ O000OOO000OOO0000={"Accept":"*/*","Accept-Encoding":"gzip, deflate, br","Accept-Language":"zh-CN,zh;q=0.9","Connection":"keep-alive","Content-Length":"45","Content-Type":"application/x-www-form-urlencoded","Host":"mili.shensemiao.com","Referer":"https://servicewechat.com/wxec97c88d99c5d385/1/page-frame.html","Sec-Fetch-Dest":"empty","Sec-Fetch-Mode":"cors","Sec-Fetch-Site":"cross-site","User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b19)XWEB/11177","xweb_xhr":"1"}
+ OO0O0O00OOOOOO0OO={"v":"1","appid":"4","appsecret":"PHPCMF19F5DF41B263B","":"","api_auth_code":f"{OO00O00OOO0OOOOO0}","api_auth_uid":f"{OOO000OOO00O0O000}","s":"Yhxcx","c":"home","m":"fb_list"}
+ O0O0O00OO0OOO0O00='page=1&limit=10&fblx=1&city=&gwfl=-1&search=1'
+ O0OOO00OO0OO0OOOO=requests.post('https://mili.shensemiao.com/index.php',headers=O000OOO000OOO0000,params=OO0O0O00OOOOOO0OO,data=O0O0O00OO0OOO0O00)
+ if O0OOO00OO0OO0OOOO.status_code==200:
+  O0OOO00OO0OO0OOOO=O0OOO00OO0OO0OOOO.json()
+  if O0OOO00OO0OO0OOOO['data']['list'][0]['id']:
+   return O0OOO00OO0OO0OOOO['data']['list'][0]['id'],O0OOO00OO0OO0OOOO['data']['list'][1]['id']
+  else:
+   return None 
+def browse(O0OO0OOO0OOO0OO0O,O00OO0OO00O0OO0OO,OOO00OOO0O00O000O,t=0):
+ OO0000OO000OO0O0O={"Accept":"*/*","Accept-Encoding":"gzip, deflate, br","Accept-Language":"zh-CN,zh;q=0.9","Connection":"keep-alive","Content-Length":"43","Content-Type":"application/x-www-form-urlencoded","Host":"mili.shensemiao.com","Referer":"https://servicewechat.com/wxec97c88d99c5d385/1/page-frame.html","Sec-Fetch-Dest":"empty","Sec-Fetch-Mode":"cors","Sec-Fetch-Site":"cross-site","User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x63090b19)XWEB/11177","xweb_xhr":"1"}
+ OO00OOOO0O000OO00={"v":"1","appid":"4","appsecret":"PHPCMF19F5DF41B263B","":"","api_auth_code":f"{O0OO0OOO0OOO0OO0O}","api_auth_uid":f"{O00OO0OO00O0OO0OO}","s":"member","app":"Yhxcx","c":"qd","m":"sign_in"}
+ O0OO00O0000O00OO0=f'id={OOO00OOO0O00O000O}&fblx=1&wcs={t}&theway=signin&search=1'
+ O0000OOOO00OO00O0=requests.post('https://mili.shensemiao.com/index.php',headers=OO0000OO000OO0O0O,params=OO00OOOO0O000OO00,data=O0OO00O0000O00OO0)
+ if O0000OOOO00OO00O0.status_code==200:
+  try:
+   O0000OOOO00OO00O0=O0000OOOO00OO00O0.json()
+   print(O0000OOOO00OO00O0)
+   if 'llurl'in O0000OOOO00OO00O0.get('data',{}):
+    O0OO000OO000OOO00=O0000OOOO00OO00O0['data']['llurl']
+    OO0O000OO000O0OO0=O0OO000OO000OOO00.split("id=")[-1]
+    return OO0O000OO000O0OO0 
    else:
-    print(f"第[{i}]个获取红包信息失败---[{r['msg']}]")
-    break
-   if i>=21:
-    break
-   time.sleep(random.randint(20,48))
- def main(self):
-  print("===========开始执行快手刷视频===========")
-  self.video("kwai_video")
-  print("===========快手刷视频执行完毕===========")
-  print("===========开始执行抖音刷视频===========")
-  self.video("pangle_video")
-  print("===========抖音刷视频执行完毕===========")
+    print(O0000OOOO00OO00O0)
+  except Exception as O0000OOOO0OO0OO0O:
+   print(O0000OOOO0OO0OO0O)
+def print_ascii_art():
+ print("// ┏┓   ┏┓")
+ print("// ┏┛┻━━━┛┻┓")
+ print("// ┃       ┃")
+ print("// ┃   ━   ┃")
+ print("// ┃ ┳┛ ┗┳ ┃")
+ print("// ┃       ┃")
+ print("// ┃   ┻   ┃")
+ print("// ┃       ┃")
+ print("// ┗━┓   ┏━┛")
+ print("// ┃   ┃ 分享群：")
+ print("// ┃   ┃ 780261548")
+ print("// ┃   ┗━━━┓")
+ print("// ┃       ┣┓")
+ print("// ┃       ┏┛")
+ print("// ┗┓┓┏━┳┓┏┛")
+ print("// ┃┫┫ ┃┫┫")
+ print("// ┗┻┛ ┗┻┛")
 if __name__=='__main__':
- cookie=''
- if not cookie:
-  cookie=os.getenv("yuanshen_zb")
-  if not cookie:
-   print("⛔️请设置环境变量:yuanshen_zb")
-   exit()
- cookies=cookie.split("@")
- print(f"一共获取到{len(cookies)}个账号")
- i=1
- for cookie in cookies:
-  print(f"\n--------开始第{i}个账号--------")
-  main=yuanshen(cookie)
-  main.main()
-  print(f"--------第{i}个账号执行完毕--------")
-  i+=1
+ print_ascii_art()
+ ck=os.getenv("ddjz")
+ if ck:
+  if "&"in ck:
+   ck=ck.split("&")
+  else:
+   ck=ck.split(" ")
+  for i in ck:
+   user,api_auth_code,api_auth_uid=i.split("#")
+   print("当前账号{}".format(user))
+   print("="*10)
+   id=get_id(api_auth_code,api_auth_uid)
+   if id:
+    browse(api_auth_code,api_auth_uid,id[0])
+    browse(api_auth_code,api_auth_uid,id[1],t=1)
+   print("="*10)
+ else:
+  print("变量不存在")
